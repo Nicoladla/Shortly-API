@@ -37,3 +37,22 @@ export async function signUpValidation(req, res, next) {
     console.log(err);
   }
 }
+
+export async function signInValidation(req, res, next) {
+  const { email, password } = req.body;
+
+  try {
+    const user = await connection.query(
+      `SELECT email FROM users WHERE email=$1;`,
+      [email]
+    );
+    if (user.rowCount === 0 || bcrypt.compareSync(password, user?.password)) {
+      return res.status(401).send({ message: "Email ou senha incorreto!" });
+    }
+
+    next();
+  } catch (err) {
+    res.status(500).send(err);
+    console.log(err);
+  }
+}

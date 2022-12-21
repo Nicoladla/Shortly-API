@@ -1,4 +1,5 @@
 import connection from "../database/db.js";
+import jwt from "jsonwebtoken";
 
 export async function signUp(req, res) {
   const { name, email, password, confirmPassword } = res.locals.user;
@@ -19,4 +20,13 @@ export async function signUp(req, res) {
   }
 }
 
-export async function signIn(req, res) {}
+export async function signIn(req, res) {
+  try {
+
+    
+    res.status(200).send(token);
+  } catch (err) {
+    res.status(500).send(err);
+    console.log(err);
+  }
+}
