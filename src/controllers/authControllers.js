@@ -1,5 +1,7 @@
 import connection from "../database/db.js";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 export async function signUp(req, res) {
   const { name, email, password, confirmPassword } = res.locals.user;
@@ -15,18 +17,22 @@ export async function signUp(req, res) {
 
     res.sendStatus(201);
   } catch (err) {
-    res.status(500).send(err);
+    res.sendStatus(500);
     console.log(err);
   }
 }
 
 export async function signIn(req, res) {
-  try {
+  const { userId } = res.locals;
 
-    
+  try {
+    const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+      expiresIn: 120,
+    });
+
     res.status(200).send(token);
   } catch (err) {
-    res.status(500).send(err);
+    res.sendStatus(500);
     console.log(err);
   }
 }

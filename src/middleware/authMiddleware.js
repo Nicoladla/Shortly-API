@@ -33,7 +33,7 @@ export async function signUpValidation(req, res, next) {
     };
     next();
   } catch (err) {
-    res.status(500).send(err);
+    res.sendStatus(500);
     console.log(err);
   }
 }
@@ -42,17 +42,20 @@ export async function signInValidation(req, res, next) {
   const { email, password } = req.body;
 
   try {
-    const user = await connection.query(
-      `SELECT email FROM users WHERE email=$1;`,
-      [email]
-    );
-    if (user.rowCount === 0 || bcrypt.compareSync(password, user?.password)) {
+    const user = await connection.query(`SELECT * FROM users WHERE email=$1;`, [
+      email,
+    ]);
+    if (
+      user.rowCount === 0 ||
+      !bcrypt.compareSync(password, user.rows[0].password)
+    ) {
       return res.status(401).send({ message: "Email ou senha incorreto!" });
     }
 
+    res.locals.userId = user.rows[0].id;
     next();
   } catch (err) {
-    res.status(500).send(err);
+    res.sendStatus(500);
     console.log(err);
   }
 }
