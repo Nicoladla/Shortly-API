@@ -17,8 +17,8 @@ export async function signUp(req, res) {
 
     res.sendStatus(201);
   } catch (err) {
-    res.sendStatus(500);
     console.log(err);
+    res.sendStatus(500);
   }
 }
 
@@ -32,7 +32,7 @@ export async function signIn(req, res) {
 
     res.status(200).send(token);
   } catch (err) {
-    res.sendStatus(500);
     console.log(err);
+    res.sendStatus(500);
   }
 }

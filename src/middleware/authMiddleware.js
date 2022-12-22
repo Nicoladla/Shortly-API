@@ -33,8 +33,8 @@ export async function signUpValidation(req, res, next) {
     };
     next();
   } catch (err) {
-    res.sendStatus(500);
     console.log(err);
+    res.sendStatus(500);
   }
 }
 
@@ -55,7 +55,7 @@ export async function signInValidation(req, res, next) {
     res.locals.userId = user.rows[0].id;
     next();
   } catch (err) {
-    res.sendStatus(500);
     console.log(err);
+    res.sendStatus(500);
   }
 }
