@@ -33,11 +33,26 @@ export async function MyshortUrlsGet(req, res) {
   }
 }
 
-export function rankingGet(req, res) {
+export async function rankingGet(req, res) {
   try {
-    const shortUrls = connection.query(`SELECT * FROM`);
+    const shortUrls = await connection.query(
+      `SELECT 
+        users.id, users.name,
+        COUNT("shortUrls".id) AS "linksCount",
+        SUM("shortUrls"."visitCount") AS "visitCount"
+      FROM 
+        "shortUrls" LEFT JOIN users
+      ON
+        "shortUrls"."userId" = users.id
+      GROUP BY
+        users.id
+      ORDER BY 
+        "visitCount" DESC 
+      LIMIT 10;`
+    );
 
-    res.status(200).send(shortUrls);
+    console.log(shortUrls.rows)
+    res.status(200).send(shortUrls.rows);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
