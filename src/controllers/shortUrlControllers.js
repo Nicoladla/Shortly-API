@@ -43,12 +43,18 @@ export async function urlOpenGet(req, res) {
 
   try {
     const shortUrlExist = await connection.query(
-      `SELECT url FROM "shortUrls" WHERE "shortUrl"=$1`,
+      `SELECT url, "visitCount" FROM "shortUrls" WHERE "shortUrl"=$1`,
       [shortUrl]
     );
     if (shortUrlExist.rowCount === 0) {
       return res.status(404).send({ message: "Url não encontrada!" });
     }
+
+    const {visitCount}= shortUrlExist.rows[0]
+    await connection.query(
+      `UPDATE "shortUrls" SET "visitCount"=$2 WHERE "shortUrl"=$1`,
+      [shortUrl, visitCount+1]
+    );
 
     res.redirect(shortUrlExist.rows[0].url);
   } catch (err) {
