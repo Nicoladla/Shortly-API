@@ -56,3 +56,16 @@ export async function urlOpenGet(req, res) {
     res.sendStatus(500);
   }
 }
+
+export async function urlDelete(req, res) {
+  const { id } = req.params;
+
+  try {
+    await connection.query(`DELETE FROM "shortUrls" WHERE id=$1`, [id]);
+
+    res.sendStatus(204);
+  } catch (err) {
+    res.sendStatus(500);
+    console.log(err);
+  }
+}
