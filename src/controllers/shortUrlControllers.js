@@ -18,3 +18,22 @@ export async function urlPost(req, res) {
     res.sendStatus(500);
   }
 }
+
+export async function urlIdGet(req, res) {
+  const { id } = req.params;
+
+  try {
+    const shortUrl = await connection.query(
+      `SELECT id, url, "shortUrl" FROM "shortUrls" WHERE id=$1`,
+      [id]
+    );
+    if (shortUrl.rowCount === 0) {
+      return res.status(404).send({ message: "Url não encontrada!" });
+    }
+
+    res.status(200).send(shortUrl.rows[0]);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+}
