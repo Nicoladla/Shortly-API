@@ -27,7 +27,7 @@ export async function signIn(req, res) {
 
   try {
     const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
-      expiresIn: 120,
+      expiresIn: 21600,
     });
 
     res.status(200).send(token);
