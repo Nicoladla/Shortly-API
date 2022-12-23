@@ -37,3 +37,22 @@ export async function urlIdGet(req, res) {
     res.sendStatus(500);
   }
 }
+
+export async function urlOpenGet(req, res) {
+  const { shortUrl } = req.params;
+
+  try {
+    const shortUrlExist = await connection.query(
+      `SELECT url FROM "shortUrls" WHERE "shortUrl"=$1`,
+      [shortUrl]
+    );
+    if (shortUrlExist.rowCount === 0) {
+      return res.status(404).send({ message: "Url não encontrada!" });
+    }
+
+    res.redirect(shortUrlExist.rows[0].url);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+}
