@@ -5,7 +5,7 @@ import { signInValidation, signUpValidation } from "../middleware/authMiddleware
 
 const router = Router();
 
-router.post("/sign-up", signUpValidation, signUp);
-router.post("/sign-in", signInValidation, signIn);
+router.post("/signup", signUpValidation, signUp);
+router.post("/signin", signInValidation, signIn);
 
 export default router;
