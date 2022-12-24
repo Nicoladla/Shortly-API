@@ -39,9 +39,9 @@ export async function rankingGet(req, res) {
       `SELECT 
         users.id, users.name,
         COUNT("shortUrls".id) AS "linksCount",
-        SUM("shortUrls"."visitCount") AS "visitCount"
+        COALESCE( SUM("shortUrls"."visitCount"), 0) AS "visitCount"
       FROM 
-        "shortUrls" LEFT JOIN users
+        "shortUrls" RIGHT JOIN users
       ON
         "shortUrls"."userId" = users.id
       GROUP BY
@@ -51,7 +51,7 @@ export async function rankingGet(req, res) {
       LIMIT 10;`
     );
 
-    console.log(shortUrls.rows)
+    console.log(shortUrls.rows);
     res.status(200).send(shortUrls.rows);
   } catch (err) {
     console.log(err);
